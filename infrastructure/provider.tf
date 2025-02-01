@@ -15,7 +15,7 @@ provider "aws" {
   # default tags to be applied to all resources
   default_tags {
     tags = {
-      environment = "development"
+      environment = "park manager"
     }
   }
 }
