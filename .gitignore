@@ -14,3 +14,9 @@
 # Crash log files
 crash.log
 crash.*.log
+
+# Dependency directories
+node_modules
+
+# All files we get from ESBuild
+dist
