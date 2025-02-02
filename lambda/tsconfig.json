@@ -1,0 +1,27 @@
+// https://docs.aws.amazon.com/lambda/latest/dg/lambda-typescript.html
+// https://github.com/tsconfig/bases/blob/main/bases/node22.json
+
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node 22", // descriptive name for this configuration
+  "_version": "22.0.0",
+
+  "compilerOptions": {
+    "lib": ["es2023"],
+    "module": "node16",
+    "target": "es2022",
+
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node16",
+
+    "preserveConstEnums": true,
+    "noEmit": true, // esbuild to perform type checks
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+
+    "outDir": "dist"
+  },
+  "exclude": ["node_modules", "dist"]
+}
