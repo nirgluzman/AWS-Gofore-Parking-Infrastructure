@@ -6,3 +6,9 @@ variable "aws_region" {
   type    = string
   default = "us-east-1"
 }
+
+variable "log_retention" {
+  description = "log retention in days"
+  type = number
+  default = 7
+}
