@@ -1,4 +1,4 @@
-# API Gateway
+# HTTP API Gateway with JWT authorizer
 
 resource "aws_apigatewayv2_api" "apigw_http" {
   description = "HTTP API Gateway for Park Manager"
@@ -58,8 +58,15 @@ resource "aws_apigatewayv2_integration" "apigw_lambda_get_data_admin" {
 resource "aws_apigatewayv2_route" "admin_get" {
   api_id = aws_apigatewayv2_api.apigw_http.id
 
+  # combination of HTTP method and path that clients use to access the API endpoint
   route_key = "GET /admin"
+
+  # define what happens after a request matches the route key
   target    = "integrations/${aws_apigatewayv2_integration.apigw_lambda_get_data_admin.id}"
+
+  # define authorization for the route
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.jwt_auth.id
 }
 
 # allow API Gateway to invoke the Lambda functions
@@ -70,6 +77,22 @@ resource "aws_lambda_permission" "apigw-get_data_admin" {
   principal     = "apigateway.amazonaws.com"
 
   source_arn = "${aws_apigatewayv2_api.apigw_http.execution_arn}/*/*"
+}
+
+# define JWT authorizer for the HTTP API Gateway.
+# IMPORTANT: This JWT authorizer verifies the JWT's signature, audience, issuer, and expiration.
+# It DOES NOT detect JWTs revoked by Cognito if their expiration time has not been reached.
+resource "aws_apigatewayv2_authorizer" "jwt_auth" {
+  name             = "cognito_jwt_auth"
+  api_id           = aws_apigatewayv2_api.apigw_http.id # associate the JWT authorizer with the HTTP API
+  authorizer_type  = "JWT" # authorizer to verify JWTs
+  identity_sources = ["$request.header.Authorization"]
+
+  # configure the JWT verification process
+  jwt_configuration {
+    audience = [aws_cognito_user_pool_client.main.id] # intended recipient of the token (ensures that the JWT was specifically issued for your application and not for some other application)
+    issuer   = "https://${aws_cognito_user_pool.main.endpoint}" # the entity that issued the token
+  }
 }
 
 # define a CloudWatch Log Group for API Gateway
