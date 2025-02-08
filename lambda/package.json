@@ -4,7 +4,7 @@
   "scripts": {
     "clean": "cd functions/%FUNCTION_NAME% && rm -rf %FUNCTION_NAME% dist out.zip",
     "lint": "cd functions/%FUNCTION_NAME% && tsc",
-    "build": "cd functions/%FUNCTION_NAME% && esbuild src/index.ts --bundle --platform=node --outfile=dist/index.mjs --format=esm",
+    "build": "cd functions/%FUNCTION_NAME% && esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js --format=cjs",
     "zip": "cd functions/%FUNCTION_NAME% && zip u -r out.zip ./dist/**",
     "package": "npm run build && npm run zip",
     "deploy": "cd functions/%FUNCTION_NAME% && aws lambda update-function-code --function-name park-manager-%FUNCTION_NAME% --zip-file fileb://out.zip"
@@ -15,9 +15,10 @@
   "type": "module",
   "description": "",
   "devDependencies": {
+    "@aws-sdk/client-dynamodb": "^3.741.0",
+    "@aws-sdk/lib-dynamodb": "^3.741.0",
     "@types/aws-lambda": "^8.10.147",
     "@types/node": "^22.13.0",
-    "aws-sdk": "^2.1692.0",
     "esbuild": "^0.24.2",
     "typescript": "^5.7.3"
   }
