@@ -19,7 +19,8 @@ resource "aws_lambda_function" "get_data_admin" {
   # environment variables which are accessible from the function code during execution
   environment {
     variables = {
-      REGION = "${var.aws_region}"
+      REGION     = "${var.aws_region}"
+      TABLE_NAME = "${local.ddb_table_name}"
     }
   }
 
@@ -59,6 +60,18 @@ resource "aws_iam_policy" "lambda_exec_policy" {
                 "logs:PutLogEvents"
             ],
             "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:DescribeTable",
+                "dynamodb:Get",
+                "dynamodb:Scan",
+                "dynamodb:PutItem",
+                "dynamodb:Update",
+                "dynamodb:Delete"
+            ],
+            "Resource": "${module.dynamodb_table.dynamodb_table_arn}"
         }
     ]
 }
