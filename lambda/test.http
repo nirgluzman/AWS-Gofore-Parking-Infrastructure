@@ -1,0 +1,19 @@
+@url = https://7zs8vbxg8j.execute-api.us-east-1.amazonaws.com/dev
+
+###
+GET {{url}}/admin
+Content-Type: application/json
+Authorization:
+
+###
+GET {{url}}/user/all
+Content-Type: application/json
+
+###
+PUT {{url}}/user/remove
+Content-Type: application/json
+
+{
+  "parkingSpot": "1",
+  "vrn": "1111"
+}
