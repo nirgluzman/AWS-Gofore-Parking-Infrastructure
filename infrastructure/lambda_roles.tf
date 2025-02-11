@@ -40,11 +40,10 @@ resource "aws_iam_policy" "lambda_exec" {
             "Effect": "Allow",
             "Action": [
                 "dynamodb:DescribeTable",
-                "dynamodb:Get",
+                "dynamodb:GetItem",
                 "dynamodb:Scan",
-                "dynamodb:PutItem",
-                "dynamodb:Update",
-                "dynamodb:Delete"
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem"
             ],
             "Resource": "${module.ddb_park.dynamodb_table_arn}"
         }
